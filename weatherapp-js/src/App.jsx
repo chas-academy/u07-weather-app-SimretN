@@ -1,39 +1,59 @@
-import "./App.css";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import { useState } from "react";
+
+
+import { useEffect, useState } from 'react'
+import CurrentWeather from './components/CurrentWeather' // Fixed import path
+import Navbar from './components/Navbar' // Fixed import path
+import WeatherForecast from './components/WeatherForecast' // Fixed import path
+import getFormattedWeatherData from './services/weatherService'
+
+import './App.css'
 
 function App() {
-  // const  [search, setSearch] = useState({""})
+   //get user geo location
+  //  let query = {};
+  //  if (navigator.geolocation) {
+  //    navigator.geolocation.getCurrentPosition(
+  //      (position) => {          
+  //        query.lat = position.coords.latitude;
+  //        query.lon = position.coords.longitude;
+         
+  //      },
+  //      () => {
+  //        setStatus("Unable to retrieve your location");
+  //      }
+  //    );
+  //  }
+  // const [weather, setWeather] = useState(null);
+  const [query, setQuery] = useState({ q: 'Tokyo', units: 'metric' })
+  const [weather, setWeather] = useState(null)
 
-  const searchClicked = () => {
-    console.log(searchClicked, "simret clicked");
-  };
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      const data = await getFormattedWeatherData({ ...query }) // Removed unnecessary .then()
+      setWeather(data)
+      console.log(query)
+    }
+    fetchWeatherData()
+  }, [query])
 
   return (
     <>
-      <div className="bg-black py-5  ">
-        <input
-          type="text"
-          placeholder="search coountries"
-          className="border-solid border-2 rounded-lg m-2 p-1"
-        />
-        <button
-          onClick={searchClicked}
-          className="bg-violet-400 text-white m-4 px-4 py-2 rounded-lg m-1 shadow-lg"
-        >
-          Search
-        </button>
-
-        {/* citylist */}
-        <p className="bg-violet-400  ">Stockholm</p>
-        {/* degreeCentigrade */}
-        <p className="bg-red-400  text-center">30 C°</p>
-        {/* feeling */}
-        <p className="bg-green-400 ">Sunny</p>
-      </div>
+      {weather && (
+        <div className={`max-w-full  main-container`}>
+          <div className='max-w-screen-md min-h-screen px-10 py-5 flex flex-col gap-5 mx-auto bg-white bg-opacity-25 font-titillium font-bold text-xl'>
+            <Navbar setQuery={setQuery} weather={weather} />
+            <CurrentWeather weather={weather} />
+            <WeatherForecast weather={weather} />
+          </div>
+        </div>
+      )}
     </>
-  );
+  )
 }
 
-export default App;
+export default App
+
+
+
+
+
