@@ -9,6 +9,7 @@ const getWeatherData = (info, params) => {
     return fetch(url).then(response => response.json()).then(data => data)
 }
 
+
 const formatCurrentWeatherData = (data) => {
     let {
         main,
@@ -63,3 +64,24 @@ const formatToLocalTime = (timezone, timestamp) => {
 }
 
 export default getFormattedWeatherData
+
+// const getFormattedWeatherData = async (searchParams) => {
+//     // Fetch current weather data and format it
+//     const formattedWeatherData = await getWeatherData('weather', searchParams)
+//         .then(formatCurrentWeatherData);
+
+//     // Fetch forecast data and format it
+//     const formattedForecastData = await getWeatherData('forecast', { ...searchParams, cnt: 5, exclude: 'current,minutely,alerts' })
+//         .then(formatForecastData);
+
+//     // Combine formatted current weather and forecast data
+//     return { ...formattedWeatherData, ...formattedForecastData };
+// }
+
+// export {
+//     getFormattedWeatherData,
+//     formatForecastData,
+//     formatCurrentWeatherData,
+//     getWeatherData
+// }
+
