@@ -1,6 +1,7 @@
 import React from 'react'
 
 const WeatherForecast = ({weather : {hourly}}) => {
+  
   return (
     <div className='flex flex-col mt-5 px-12'>
       <section className='text-lg font-bold uppercase text-white'>
@@ -12,7 +13,7 @@ const WeatherForecast = ({weather : {hourly}}) => {
           hourly.map((item, id) => {
             return <div key={id} className='flex flex-col justify-center items-center'>
               <span className='text-white text-sm font-medium flex flex-col gap-3 items-center justify-center'>
-                <h1>{item.localdate.split(" ")[0].substring(0,3)}</h1>
+                {/* <h1>{item.localdate.split(" ")[0].substring(0,3)}</h1> */}
                 <h1>{item.localTime}</h1>
               </span>
               <span>

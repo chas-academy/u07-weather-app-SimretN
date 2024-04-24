@@ -1,53 +1,57 @@
-import { useEffect, useState } from "react";
-import CurrentWeather from "./components/CurrentWeather"; // Fixed import path
-import Navbar from "./components/Navbar"; // Fixed import path
-import WeatherForecast from "./components/WeatherForecast"; // Fixed import path
-import getFormattedWeatherData from "./services/weatherService";
+import { useEffect, useState } from 'react';
+import CurrentWeather from './components/CurrentWeather'; 
+import Navbar from './components/Navbar'; 
+import WeatherForecast from './components/WeatherForecast'; 
+import getFormattedWeatherData from './services/weatherService';
 
-import "./App.css";
+import './App.css';
 
 function App() {
-  const getLocation = async () => {
-    const pos = await new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject);
-    });
-    setStatus("");
-    return {
-      lat: pos.coords.latitude,
-      lon: pos.coords.longitude,
-      units: 'metric'
-    };
-  };
-  const [status, setStatus] = useState(null);
-  const [query, setQuery] = useState(null);
-  const [weather, setWeather] = useState(null);
+	const getLocation = async () => {
+		const pos = await new Promise((resolve, reject) => {
+			navigator.geolocation.getCurrentPosition(resolve, reject);
+		});
+		setStatus('');
+		return {
+			lat: pos.coords.latitude,
+			lon: pos.coords.longitude,
+			units: 'metric',
+		};
+	};
+	const [status, setStatus] = useState(null);
+	const [query, setQuery] = useState(null);
+	const [weather, setWeather] = useState(null);
+	const [units, setUnits] = useState("metric");
 
-  useEffect(() => {
-      
-    const fetchWeatherData = async () => {    
-        if(!query){
-            setStatus("Loading");
-            await getLocation().then(x => setQuery(x));
-        }
-        const data = await getFormattedWeatherData({...query});      
-        setWeather(data);     
-    };
-    fetchWeatherData();
-  }, [query]);
 
-  return (
-    <>
-      {weather && (
-        <div className={`max-w-full  main-container`}>
-          <div className="max-w-screen-md min-h-screen px-10 py-5 flex flex-col gap-5 mx-auto bg-white bg-opacity-25 font-titillium font-bold text-xl">
-            <Navbar setQuery={setQuery} weather={weather} />
-            <CurrentWeather weather={weather} />
-            <WeatherForecast weather={weather} />
-          </div>
-        </div>
-      )}
-    </>
-  );
+	useEffect(() => {
+		const fetchWeatherData = async () => {
+			if (!query) {
+				setStatus("Loading");
+				await getLocation().then((x) => setQuery(x));
+			}
+			const data = await getFormattedWeatherData({ ...query, units });
+			setWeather(data);
+		};
+
+		fetchWeatherData();
+	}, [query, units]);
+
+	return (
+		<>
+			{weather && (
+				<div className={`max-w-full  main-container`}>
+					<div className='max-w-screen-md min-h-screen px-10 py-5 flex flex-col gap-5 mx-auto  bg-opacity-25 font-titillium font-bold text-xl'>
+						<h1>Simret Weather App</h1>
+						<Navbar setQuery={setQuery} units={units} setUnits={setUnits} weather={weather} />
+						<CurrentWeather weather={weather} />
+						<WeatherForecast title= "hourly" weather={weather} items={weather.hourly}/>
+						<WeatherForecast title= "daily" weather={weather} items={weather.daily}/>
+					</div>
+				</div>
+			)}
+		</>
+	);
 }
 
 export default App;
