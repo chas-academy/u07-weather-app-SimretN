@@ -3,10 +3,13 @@ import CurrentWeather from './components/CurrentWeather';
 import Navbar from './components/Navbar'; 
 import WeatherForecast from './components/WeatherForecast'; 
 import getFormattedWeatherData from './services/weatherService';
+import DailyWeatherforecast from './components/DailyWeatherforecast'; 
+
 
 import './App.css';
 
 function App() {
+  
 	const getLocation = async () => {
 		const pos = await new Promise((resolve, reject) => {
 			navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -28,7 +31,8 @@ function App() {
 		const fetchWeatherData = async () => {
 			if (!query) {
 				setStatus("Loading");
-				await getLocation().then((x) => setQuery(x));
+				 await getLocation().then((x) => setQuery(x));
+        return;
 			}
 			const data = await getFormattedWeatherData({ ...query, units });
 			setWeather(data);
@@ -39,17 +43,27 @@ function App() {
 
 	return (
 		<>
-			{weather && (
+			
 				<div className={`max-w-full  main-container`}>
 					<div className='max-w-screen-md min-h-screen px-10 py-5 flex flex-col gap-5 mx-auto  bg-opacity-25 font-titillium font-bold text-xl'>
 						<h1>Simret Weather App</h1>
 						<Navbar setQuery={setQuery} units={units} setUnits={setUnits} weather={weather} />
-						<CurrentWeather weather={weather} />
+						{!weather && (
+              <h2 className='text-white text-center text-lg font-semibold mt-5'>To access weather forecast give location manually or give access to device's location</h2>
+            )}
+            
+            {weather && (
+              <>
+            <CurrentWeather weather={weather} />
 						<WeatherForecast title= "hourly" weather={weather} items={weather.hourly}/>
-						<WeatherForecast title= "daily" weather={weather} items={weather.daily}/>
-					</div>
+						{/* <DailyWeatherforecast title= "daily" weather={weather} items={weather.daily}/> */}
+            <DailyWeatherforecast weather={weather} items={weather.daily} />
+            {/* weather.daily && <DailyWeatherforecast weather={weather} />  */}
+           </>
+					)}
+           </div>
 				</div>
-			)}
+			
 		</>
 	);
 }

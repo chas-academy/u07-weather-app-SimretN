@@ -58,6 +58,25 @@ const formatForecastData = (data) => {
 	return { hourly };
 };
 
+const formatdailydata = (data) => {
+	let {
+		city: { timezone },
+		list,
+	} = data;
+
+	let daily = list.filter(day => {
+		return new Date(day.dt_txt).getDate() !== new Date(Date.now()).getDate() && new Date(day.dt_txt).getHours() === 12;
+	}).map((d) => {
+		return {
+			localdate: formatToLocalTime(timezone, d.dt).localdate,
+			localTime: formatToLocalTime(timezone, d.dt).localTime,
+			temp: d.main.temp,
+			icon: d.weather[0].icon,
+		};
+	});
+	return { daily };
+}
+
 const getFormattedWeatherData = async (searchParams) => {
 	const formattedWeatherData = await getWeatherData(
 		'weather',
@@ -70,7 +89,12 @@ const getFormattedWeatherData = async (searchParams) => {
 		exclude: 'current,minutely,alerts',
 	}).then(formatForecastData);
 
-	return { ...formattedWeatherData, ...formattedForecastData };
+	const formatteddailydata = await getWeatherData('forecast', {
+		...searchParams,
+		exclude: 'current,minutely,alerts',
+	}).then(formatdailydata);
+
+	return { ...formattedWeatherData, ...formattedForecastData, ...formatteddailydata };
 };
 
 const formatToLocalTime = (timezone, timestamp) => {
