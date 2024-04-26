@@ -1,7 +1,6 @@
 import React from 'react'
 
 const WeatherForecast = ({weather : {hourly}}) => {
-  console.log(hourly)
   return (
     <div className='flex flex-col mt-5 px-12'>
       <section className='text-lg font-bold uppercase text-white'>

@@ -7,7 +7,6 @@ function App() {
   // const  [search, setSearch] = useState({""})
 
   const searchClicked = () => {
-    console.log(searchClicked, "simret clicked");
   };
 
   return (
