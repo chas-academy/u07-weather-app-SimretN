@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import WeatherForecast from "./components/WeatherForecast";
 import getFormattedWeatherData from "./services/weatherService";
 import DailyWeatherforecast from "./components/DailyWeatherforecast";
+import Footer from "./components/Footer";
 
 import "./App.css";
 
@@ -41,8 +42,10 @@ function App() {
   return (
     <>
       <div className={`max-w-full  main-container`}>
-        <div className="max-w-screen-md min-h-screen px-10 py-5 flex flex-col gap-5 mx-auto  bg-opacity-25 font-titillium font-bold text-xl">
-          <h1 className=" text-white text-3xl mb-5 flex justify-center ">SIMRET WEATHER APP</h1>
+        <div className="max-w-screen-md min-h-screen px-10 py-5 flex flex-col gap-5 mx-auto items-center justify-center text-center bg-opacity-25 font-titillium font-bold text-xl">
+          <h1 className=" text-white text-3xl mb-5 flex justify-center ">
+            SIMRET WEATHER APP
+          </h1>
           <Navbar
             setQuery={setQuery}
             units={units}
@@ -69,6 +72,7 @@ function App() {
               {/* weather.daily && <DailyWeatherforecast weather={weather} />  */}
             </>
           )}
+          <Footer />
         </div>
       </div>
     </>
@@ -76,5 +80,3 @@ function App() {
 }
 
 export default App;
-
-
